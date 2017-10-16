@@ -18,7 +18,7 @@
    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
   >
   <modelVersion>4.0.0</modelVersion>
-  <groupId>com.google.javascript</groupId>
+  <groupId>com.vertispan.javascript</groupId>
   <artifactId>closure-compiler-parent</artifactId>
   <packaging>pom</packaging>
 
@@ -254,4 +254,16 @@
       </build>
     </profile>
   </profiles>
+  <distributionManagement>
+    <repository>
+      <id>vertispan-releases</id>
+      <name>Vertispan hosted artifacts-releases</name>
+      <url>https://repo.vertispan.com/j2cl</url>
+    </repository>
+    <snapshotRepository>
+      <id>vertispan-snapshots</id>
+      <name>Vertispan hosted artifacts-snapshots</name>
+      <url>https://repo.vertispan.com/j2cl</url>
+    </snapshotRepository>
+  </distributionManagement>
 </project>
