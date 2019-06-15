@@ -291,7 +291,7 @@ public abstract class AbstractCommandLineRunner<A extends Compiler,
    */
   @GwtIncompatible("Unnecessary")
   protected abstract void prepForBundleAndAppendTo(
-      Appendable out, CompilerInput input, String content) throws IOException;
+      Appendable out, CompilerInput input, String content, String outputPath) throws IOException;
 
   /** Writes whatever runtime libraries are needed to bundle. */
   @GwtIncompatible("Unnecessary")
@@ -2160,22 +2160,7 @@ public abstract class AbstractCommandLineRunner<A extends Compiler,
       out.append(displayName);
       out.append("\n");
 
-      if (input.isModule()) {
-        // TODO(sdh): This is copied from ClosureBundler
-        out.append("goog.loadModule(\"'use strict';\\n\"+");
-        out.append(new CodePrinter.Builder(IR.string(input.getSourceFile().getCode())).build());
-
-        String pathToInput = new File(input.getName()).getCanonicalPath();
-        String pathToOutput = new File(outputPath).getParentFile().getCanonicalPath();
-        String relativePath = Paths.get(pathToOutput).relativize(Paths.get(pathToInput)).toString();
-        if (!relativePath.startsWith("..")) {
-          out.append("+'\\n//# sourceURL=").append(relativePath).append("'");
-        }
-
-        out.append(");\n");
-      } else {
-        out.append(input.getSourceFile().getCode());
-      }
+      prepForBundleAndAppendTo(out, input, code, outputPath);
 
       out.append("\n");
     }

@@ -1982,9 +1982,20 @@ public class CommandLineRunner extends
   }
 
   @Override
-  protected void prepForBundleAndAppendTo(Appendable out, CompilerInput input, String content)
+  protected void prepForBundleAndAppendTo(Appendable out, CompilerInput input, String content, String outputPath)
       throws IOException {
-    getBundler().withPath(input.getName()).appendTo(out, input, content);
+    String pathToInput = new File(input.getName()).getCanonicalPath();
+    String pathToOutput = new File(outputPath).getParentFile().getCanonicalPath();
+    String relativePath = Paths.get(pathToOutput).relativize(Paths.get(pathToInput)).toString();
+
+    ClosureBundler bundler;
+    if (!relativePath.startsWith("..")) {
+      bundler = getBundler().useEval(true).withSourceUrl(relativePath);
+    } else {
+      bundler = getBundler();
+    }
+
+    bundler.withPath(input.getName()).appendTo(out, input, content);
   }
 
   @Override
