@@ -1785,7 +1785,7 @@ public final class CommandLineRunnerTest {
 
     StringBuilder builder = new StringBuilder();
     lastCommandLineRunner.printModuleGraphManifestOrBundleTo(
-        lastCompiler.getModuleGraph(), builder, true);
+        lastCompiler.getModuleGraph(), builder, true, null);
     assertThat(builder.toString())
         .isEqualTo(
             Joiner.on('\n')
@@ -1813,7 +1813,7 @@ public final class CommandLineRunnerTest {
 
     StringBuilder builder = new StringBuilder();
     lastCommandLineRunner.printModuleGraphManifestOrBundleTo(
-        lastCompiler.getModuleGraph(), builder, true);
+        lastCompiler.getModuleGraph(), builder, true, null);
     assertThat(builder.toString())
         .isEqualTo(
             Joiner.on('\n')

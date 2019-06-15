@@ -287,7 +287,7 @@ public abstract class AbstractCommandLineRunner<A extends Compiler, B extends Co
    */
   @GwtIncompatible("Unnecessary")
   protected abstract void prepForBundleAndAppendTo(
-      Appendable out, CompilerInput input, String content) throws IOException;
+      Appendable out, CompilerInput input, String content, String outputPath) throws IOException;
 
   /** Writes whatever runtime libraries are needed to bundle. */
   @GwtIncompatible("Unnecessary")
@@ -1646,6 +1646,7 @@ public abstract class AbstractCommandLineRunner<A extends Compiler, B extends Co
       outputManifest();
       outputBundle();
       outputModuleGraphJson();
+      outputSourceMap(options, config.jsOutputFile);
       return 0;
     } else if (options.outputJs != OutputJs.NONE && result.success) {
       outputModuleGraphJson();
@@ -2274,17 +2275,19 @@ public abstract class AbstractCommandLineRunner<A extends Compiler, B extends Co
         // Generate per-module manifests or bundles.
         Iterable<JSChunk> modules = compiler.getModuleGraph().getAllChunks();
         for (JSChunk module : modules) {
-          try (Writer out = fileNameToOutputWriter2(expandCommandLinePath(output, module))) {
+          String outputPath = expandCommandLinePath(output, module);
+          try (Writer out = fileNameToOutputWriter2(outputPath)) {
             if (isManifest) {
               printManifestTo(module, out);
             } else {
-              printBundleTo(module, out);
+              printBundleTo(module, out, outputPath);
             }
           }
         }
       } else {
         // Generate a single file manifest or bundle.
-        try (Writer out = fileNameToOutputWriter2(expandCommandLinePath(output, null))) {
+        String outputPath = expandCommandLinePath(output, null);
+        try (Writer out = fileNameToOutputWriter2(outputPath)) {
           if (config.module.isEmpty()) {
             // For a single-module compilation, generate a single headerless manifest or bundle
             // containing only the strong files.
@@ -2292,11 +2295,11 @@ public abstract class AbstractCommandLineRunner<A extends Compiler, B extends Co
             if (isManifest) {
               printManifestTo(module, out);
             } else {
-              printBundleTo(module, out);
+              printBundleTo(module, out, outputPath);
             }
           } else {
             // For a multi-module compilation, generate a single manifest file with module headers.
-            printModuleGraphManifestOrBundleTo(compiler.getModuleGraph(), out, isManifest);
+            printModuleGraphManifestOrBundleTo(compiler.getModuleGraph(), out, isManifest, outputPath);
           }
         }
       }
@@ -2323,7 +2326,7 @@ public abstract class AbstractCommandLineRunner<A extends Compiler, B extends Co
   /** Prints a set of modules to the manifest or bundle file. */
   @VisibleForTesting
   @GwtIncompatible("Unnecessary")
-  void printModuleGraphManifestOrBundleTo(JSChunkGraph graph, Appendable out, boolean isManifest)
+  void printModuleGraphManifestOrBundleTo(JSChunkGraph graph, Appendable out, boolean isManifest, String outputPath)
       throws IOException {
     Joiner commas = Joiner.on(",");
     boolean requiresNewline = false;
@@ -2346,7 +2349,7 @@ public abstract class AbstractCommandLineRunner<A extends Compiler, B extends Co
                 "{%s%s}\n", module.getName(), dependencies.isEmpty() ? "" : ":" + dependencies));
         printManifestTo(module, out);
       } else {
-        printBundleTo(module, out);
+        printBundleTo(module, out, outputPath);
       }
       requiresNewline = true;
     }
@@ -2380,7 +2383,7 @@ public abstract class AbstractCommandLineRunner<A extends Compiler, B extends Co
    */
   @VisibleForTesting
   @GwtIncompatible("Unnecessary")
-  void printBundleTo(JSChunk module, Appendable out) throws IOException {
+  void printBundleTo(JSChunk module, Appendable out, String outputPath) throws IOException {
     ImmutableList<CompilerInput> inputs = module.getInputs();
     // Prebuild ASTs before they're needed in getLoadFlags, for performance and because
     // StackOverflowErrors can be hit if not prebuilt.
@@ -2428,7 +2431,7 @@ public abstract class AbstractCommandLineRunner<A extends Compiler, B extends Co
       out.append(displayName);
       out.append("\n");
 
-      prepForBundleAndAppendTo(out, input, code);
+      prepForBundleAndAppendTo(out, input, code, outputPath);
 
       out.append("\n");
     }
