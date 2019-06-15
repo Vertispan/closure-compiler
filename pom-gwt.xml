@@ -24,7 +24,7 @@
   <packaging>gwt-app</packaging>
 
   <name>Closure Compiler GWT App</name>
-  <version>1.0-SNAPSHOT</version>
+  <version>0.1-SNAPSHOT</version>
 
   <url>https://developers.google.com/closure/compiler/</url>
   <description>
@@ -55,7 +55,7 @@
   <parent>
     <groupId>com.vertispan.javascript</groupId>
     <artifactId>closure-compiler-parent</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>0.1-SNAPSHOT</version>
     <relativePath>pom.xml</relativePath>
   </parent>
 
@@ -63,7 +63,7 @@
     <dependency>
       <groupId>com.vertispan.javascript</groupId>
       <artifactId>closure-compiler-externs</artifactId>
-      <version>1.0-SNAPSHOT</version>
+      <version>0.1-SNAPSHOT</version>
     </dependency>
 
     <dependency>
