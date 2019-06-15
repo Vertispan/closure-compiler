@@ -730,4 +730,18 @@ public abstract class AbstractCompiler implements SourceExcerptProvider, Compile
    * compilation process.
    */
   abstract LocaleData getLocaleSubstitutionData();
+
+  @Deprecated// probably drop this, and use filesystem ast instead
+  private @Nullable PersistentInputStore persistentInputStore;
+
+  @Deprecated// probably drop this, and use filesystem ast instead
+  public void setPersistentInputStore(PersistentInputStore persistentInputStore) {
+    this.persistentInputStore = persistentInputStore;
+  }
+
+  @Deprecated// probably drop this, and use filesystem ast instead
+  @Nullable
+  public PersistentInputStore getPersistentInputStore() {
+    return persistentInputStore;
+  }
 }

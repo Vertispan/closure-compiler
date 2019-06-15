@@ -650,6 +650,12 @@ public class Compiler extends AbstractCompiler implements ErrorHandler, SourceFi
     JSChunk module = new JSChunk(JSChunk.STRONG_MODULE_NAME);
     for (SourceFile source : sources) {
       module.add(this.createInputConsideringTypedAstFilesystem(source, /* isExtern */ false));
+      // old persistent input store code, saved for posterity if we decide that ast filesystem doesn't work
+//      if (this.getPersistentInputStore() != null) {
+//        module.add(this.getPersistentInputStore().getCachedCompilerInput(source));
+//      } else {
+//        module.add(new CompilerInput(source));
+//      }
     }
 
     List<JSChunk> modules = new ArrayList<>(1);
@@ -3857,5 +3863,16 @@ public class Compiler extends AbstractCompiler implements ErrorHandler, SourceFi
     }
     checkState(!script.getFirstChild().isModuleBody(), msg, args);
     return script;
+  }
+
+  public void resetCompilerInput() {
+    for (JSModule module : getModules()) {
+      for (CompilerInput input : module.getInputs()) {
+        input.reset();
+      }
+    }
+    for (CompilerInput input : this.externs) {
+      input.reset();
+    }
   }
 }
