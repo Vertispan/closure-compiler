@@ -729,4 +729,15 @@ public abstract class AbstractCompiler implements SourceExcerptProvider, Compile
   public abstract ModuleMap getModuleMap();
 
   public abstract void setModuleMap(ModuleMap moduleMap);
+
+  private @Nullable PersistentInputStore persistentInputStore;
+
+  public void setPersistentInputStore(PersistentInputStore persistentInputStore) {
+    this.persistentInputStore = persistentInputStore;
+  }
+
+  @Nullable
+  public PersistentInputStore getPersistentInputStore() {
+    return persistentInputStore;
+  }
 }
