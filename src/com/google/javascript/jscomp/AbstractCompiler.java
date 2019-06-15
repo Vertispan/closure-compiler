@@ -733,4 +733,15 @@ public abstract class AbstractCompiler implements SourceExcerptProvider, Compile
    * rewriting has not occurred.
    */
   abstract void mergeSyntheticCodeInput();
+
+  private @Nullable PersistentInputStore persistentInputStore;
+
+  public void setPersistentInputStore(PersistentInputStore persistentInputStore) {
+    this.persistentInputStore = persistentInputStore;
+  }
+
+  @Nullable
+  public PersistentInputStore getPersistentInputStore() {
+    return persistentInputStore;
+  }
 }
