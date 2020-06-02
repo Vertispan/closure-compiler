@@ -30,6 +30,9 @@ function TrustedScript() {}
 /** @constructor */
 function TrustedScriptURL() {}
 
+/** @constructor */
+function TrustedURL() {}
+
 
 /** @constructor */
 function TrustedTypePolicy() {}
@@ -51,6 +54,12 @@ TrustedTypePolicy.prototype.createScript = function(s) {};
  * @return {!TrustedScriptURL}
  */
 TrustedTypePolicy.prototype.createScriptURL = function(s) {};
+
+/**
+ * @param {string} s
+ * @return {!TrustedURL}
+ */
+TrustedTypePolicy.prototype.createURL = function(s) {};
 
 
 /** @constructor */
@@ -74,14 +83,29 @@ TrustedTypePolicyOptions.prototype.createScript;
  */
 TrustedTypePolicyOptions.prototype.createScriptURL;
 
+/**
+ *  @type {(function(string, ...*): string)|undefined},
+ */
+TrustedTypePolicyOptions.prototype.createURL;
 
 /**
  * @param {string} name
  * @param {!TrustedTypePolicyOptions} policy
+ * @param {boolean=} opt_expose
  * @return {!TrustedTypePolicy}
  */
-TrustedTypePolicyFactory.prototype.createPolicy = function(name, policy) {};
+TrustedTypePolicyFactory.prototype.createPolicy = function(
+    name, policy, opt_expose) {};
 
+/**
+ * @param {string} name
+ * @return {!TrustedTypePolicy}
+ * @deprecated
+ */
+TrustedTypePolicyFactory.prototype.getExposedPolicy = function(name) {};
+
+/** @return {!Array<string>} */
+TrustedTypePolicyFactory.prototype.getPolicyNames = function() {};
 
 /**
  * @param {*} obj
@@ -101,14 +125,21 @@ TrustedTypePolicyFactory.prototype.isScript = function(obj) {};
  */
 TrustedTypePolicyFactory.prototype.isScriptURL = function(obj) {};
 
+/**
+ * @param {*} obj
+ * @return {boolean}
+ * @deprecated
+ */
+TrustedTypePolicyFactory.prototype.isURL = function(obj) {};
 
 /** @type {!TrustedHTML} */
 TrustedTypePolicyFactory.prototype.emptyHTML;
 
-
-/** @type {!TrustedScript} */
-TrustedTypePolicyFactory.prototype.emptyScript;
-
+/**
+ * @type {!TrustedTypePolicyFactory}
+ * @deprecated
+ */
+var TrustedTypes;
 
 /** @type {!TrustedTypePolicyFactory} */
 var trustedTypes;
