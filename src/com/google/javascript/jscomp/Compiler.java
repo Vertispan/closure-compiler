@@ -3865,8 +3865,9 @@ public class Compiler extends AbstractCompiler implements ErrorHandler, SourceFi
     return script;
   }
 
+  @Deprecated // Removed with persistent input store
   public void resetCompilerInput() {
-    for (JSModule module : getModules()) {
+    for (JSChunk module : getModules()) {
       for (CompilerInput input : module.getInputs()) {
         input.reset();
       }
