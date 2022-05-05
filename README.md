@@ -262,7 +262,7 @@ You can trigger the build process easily with package.json scripts or by calling
 Bazel manually.
 
 ```bash
-# bazelisk build //:compiler_unshaded_deploy.jar
+# bazelisk build //:compiler_uberjar_deploy.jar
 yarn build
 
 # bazelisk build :all
@@ -297,7 +297,7 @@ directory. You can access it with a call to `java -jar ...` or by using the
 package.json script:
 
 ```bash
-# java -jar bazel-bin/compiler_unshaded_deploy.jar [...args]
+# java -jar bazel-bin/compiler_uberjar_deploy.jar [...args]
 yarn compile [...args]
 ```
 
